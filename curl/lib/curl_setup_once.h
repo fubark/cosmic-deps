@@ -147,7 +147,6 @@ struct timeval {
  * SEND_TYPE_ARG2, SEND_TYPE_ARG3, SEND_TYPE_ARG4 and
  * SEND_TYPE_RETV must also be defined.
  */
-
 #if !defined(RECV_TYPE_ARG1) || \
     !defined(RECV_TYPE_ARG2) || \
     !defined(RECV_TYPE_ARG3) || \
