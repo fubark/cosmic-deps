@@ -39,3 +39,9 @@
 /curl/tests/
 /curl/winbuild/
 /curl/zuul.d/
+/zlib/*.pdf
+/zlib/*.map
+/zlib/*.in
+/zlib/*.cmakein
+/zlib/*.xml
+/zlib/*.3
