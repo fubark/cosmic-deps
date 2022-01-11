@@ -45,3 +45,5 @@
 /zlib/*.cmakein
 /zlib/*.xml
 /zlib/*.3
+/openssl/**/*.info
+/openssl/**/*.md
