@@ -47,3 +47,6 @@
 /zlib/*.3
 /openssl/**/*.info
 /openssl/**/*.md
+/h2o/**/.*
+/h2o/**/*.txt
+/h2o/**/*.md
