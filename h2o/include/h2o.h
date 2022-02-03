@@ -26,6 +26,7 @@
 extern "C" {
 #endif
 
+#include "user_config.h"
 #include <assert.h>
 #include <stddef.h>
 #include <stdint.h>

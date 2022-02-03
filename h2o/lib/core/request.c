@@ -394,7 +394,9 @@ static void process_resolved_request(h2o_req_t *req, h2o_hostconf_t **hosts)
     }
 
     /* uses the current pathconf, in other words, proxy uses the previous pathconf for building filters */
+#ifdef ENABLE_PROXY
     h2o__proxy_process_request(req);
+#endif
 }
 
 void h2o_reprocess_request(h2o_req_t *req, h2o_iovec_t method, const h2o_url_scheme_t *scheme, h2o_iovec_t authority,

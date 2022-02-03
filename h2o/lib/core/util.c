@@ -84,6 +84,8 @@ static struct st_h2o_accept_data_t *create_default_accept_data(h2o_accept_ctx_t 
     return data;
 }
 
+#ifdef ENABLE_REDIS
+
 static struct st_h2o_accept_data_t *create_redis_accept_data(h2o_accept_ctx_t *ctx, h2o_socket_t *sock, struct timeval connected_at)
 {
     struct st_h2o_redis_resumption_accept_data_t *data = (struct st_h2o_redis_resumption_accept_data_t *)create_accept_data(
@@ -91,6 +93,10 @@ static struct st_h2o_accept_data_t *create_redis_accept_data(h2o_accept_ctx_t *c
     data->get_command = NULL;
     return &data->super;
 }
+
+#endif
+
+#ifdef ENABLE_MEMCACHED
 
 static struct st_h2o_accept_data_t *create_memcached_accept_data(h2o_accept_ctx_t *ctx, h2o_socket_t *sock,
                                                                  struct timeval connected_at)
@@ -100,6 +106,8 @@ static struct st_h2o_accept_data_t *create_memcached_accept_data(h2o_accept_ctx_
     data->get_req = NULL;
     return &data->super;
 }
+
+#endif
 
 static void destroy_accept_data(struct st_h2o_accept_data_t *data)
 {
@@ -135,6 +143,8 @@ static struct {
     destroy_default_accept_data,
 };
 
+#ifdef ENABLED_MEMCACHED
+
 static void memcached_resumption_on_get(h2o_iovec_t session_data, void *_accept_data)
 {
     struct st_h2o_memcached_resumption_accept_data_t *accept_data = _accept_data;
@@ -165,6 +175,10 @@ void h2o_accept_setup_memcached_ssl_resumption(h2o_memcached_context_t *memc, un
     accept_data_callbacks.create = create_memcached_accept_data;
     accept_data_callbacks.destroy = destroy_memcached_accept_data;
 }
+
+#endif
+
+#ifdef ENABLE_REDIS
 
 static void on_redis_connect(void)
 {
@@ -198,6 +212,8 @@ static h2o_redis_client_t *get_redis_client(h2o_context_t *ctx)
     }
     return *client;
 }
+
+#endif
 
 #define BASE64_LENGTH(len) (((len) + 2) / 3 * 4 + 1)
 
@@ -240,6 +256,8 @@ static void redis_resumption_on_get(redisReply *reply, void *_accept_data, const
     if (session_data.base != NULL)
         free(session_data.base);
 }
+
+#ifdef ENABLE_REDIS
 
 static void on_redis_resumption_get_failed(h2o_timer_t *timeout_entry)
 {
@@ -301,6 +319,8 @@ void h2o_accept_setup_redis_ssl_resumption(const char *host, uint16_t port, unsi
     accept_data_callbacks.destroy = destroy_redis_accept_data;
 }
 
+#endif
+
 static void accept_timeout(struct st_h2o_accept_data_t *data)
 {
     /* TODO log */
@@ -326,6 +346,8 @@ static void on_redis_accept_timeout(h2o_timer_t *entry)
     accept_timeout(&data->super);
 }
 
+#ifdef ENABLE_MEMCACHED
+
 static void on_memcached_accept_timeout(h2o_timer_t *entry)
 {
     struct st_h2o_memcached_resumption_accept_data_t *data =
@@ -336,6 +358,8 @@ static void on_memcached_accept_timeout(h2o_timer_t *entry)
     }
     accept_timeout(&data->super);
 }
+
+#endif
 
 static void on_ssl_handshake_complete(h2o_socket_t *sock, const char *err)
 {
@@ -939,8 +963,13 @@ const char h2o_npn_protocols[] = NPN_PROTOCOLS_CORE "\x08"
 
 uint64_t h2o_connection_id = 0;
 
+// Unused
+/*
+
 void h2o_cleanup_thread(void)
 {
     h2o_mem_clear_recycle(&h2o_mem_pool_allocator, 1);
     h2o_buffer_clear_recycle(1);
 }
+
+*/

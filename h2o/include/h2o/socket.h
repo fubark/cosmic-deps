@@ -26,6 +26,8 @@
 extern "C" {
 #endif
 
+#include "user_config.h"
+
 #include <stdint.h>
 #include <sys/socket.h>
 #include <openssl/ssl.h>

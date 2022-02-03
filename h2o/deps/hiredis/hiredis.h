@@ -33,6 +33,7 @@
 
 #ifndef __HIREDIS_H
 #define __HIREDIS_H
+#include "user_config.h"
 #include "read.h"
 #include <stdarg.h> /* for va_list */
 #include <sys/time.h> /* for struct timeval */
