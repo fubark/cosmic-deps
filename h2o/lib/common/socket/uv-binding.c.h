@@ -267,7 +267,11 @@ void do_ssl_write(struct st_h2o_uv_socket_t *sock, int is_first_call, h2o_iovec_
     }
 
     /* Send pending TLS records. */
+#ifdef __MINGW32__
+    uv_buf_t uvbuf = {sock->super.ssl->output.buf.off, (char *)sock->super.ssl->output.buf.base};
+#else
     uv_buf_t uvbuf = {(char *)sock->super.ssl->output.buf.base, sock->super.ssl->output.buf.off};
+#endif
     int res = uv_write(&sock->stream._wreq, (uv_stream_t *)sock->handle, &uvbuf, 1, on_ssl_write_complete);
     if (res != 0) {
         on_ssl_write_complete(&sock->stream._wreq, res);
